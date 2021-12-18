@@ -52,7 +52,7 @@ namespace ASAPAssignmentAPI.Controllers
             Result.Data = await PersonRepo.Update(person);
             await IunitOfWork.Save();
             Result.IsSucess = true;
-            Result.Message = "Edit  Person SuccessFully";
+            Result.Message = "Edit Person SuccessFully";
             return Result;
         }
 
