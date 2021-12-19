@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repositorys;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ASAPAssignmentAPI.Controllers
 {
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class PersonController : ControllerBase
@@ -23,11 +25,21 @@ namespace ASAPAssignmentAPI.Controllers
             Result = new ResultViewModel();
         }
 
-        // return all Persons
+        // return all Person
         [HttpGet]
-        public async Task<ResultViewModel> GetAllPerson ()
+        public async Task<ResultViewModel> GetAllPerson()
         {
             Result.Data = await PersonRepo.GetAsync();
+            Result.IsSucess = true;
+            return Result;
+        }
+
+        // return Person By ID
+        [Route("{PersonID}")]
+        [HttpGet ]
+        public async Task<ResultViewModel> GetPerson(int PersonID )
+        {
+            Result.Data = await PersonRepo.GetByIDAsync(PersonID);
             Result.IsSucess = true;
             return Result;
         }

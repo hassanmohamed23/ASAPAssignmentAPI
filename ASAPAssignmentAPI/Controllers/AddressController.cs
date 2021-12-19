@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Repositorys;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace ASAPAssignmentAPI.Controllers
 {
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     [ApiController]
     public class AddressController : ControllerBase
@@ -22,13 +24,30 @@ namespace ASAPAssignmentAPI.Controllers
             AddressRepo = IunitOfWork.GetAddressRepo();
             Result = new ResultViewModel();
         }
+        // return All Address  
+        [HttpGet]
+        public async Task<ResultViewModel> GetAllAddress()
+        {
+            Result.Data = await AddressRepo.GetAsync();
+            Result.IsSucess = true;
+            return Result;
+        }
 
         // return List of Address by User ID
         [HttpGet]
-        [Route("{PersonId}")]
-        public async Task<ResultViewModel> GetAddress(int PersonId)
+        [Route("GetAddressByPersonID/{PersonId}")]
+        public async Task<ResultViewModel> GetAddressByPersonID(int PersonId)
         {
             Result.Data = await AddressRepo.FindByCondition(i => i.PersonID == PersonId);
+            Result.IsSucess = true;
+            return Result;
+        }
+        // return Address by ID
+        [HttpGet]
+        [Route("GetAddressById/{AddressId}")]
+        public async Task<ResultViewModel> GetAddressById(int AddressId)
+        {
+            Result.Data = await AddressRepo.GetByIDAsync(AddressId);
             Result.IsSucess = true;
             return Result;
         }
